@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <a href="/" style="color: white; font-size: 1.5rem;"><i class="fas fa-arrow-left"></i></a>
+                <h1>Sleep Dashboard</h1>
+            </div>
+            <p>Your sleep trends & insights</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card good">
+                    <i class="fas fa-check-circle"></i>
+                    <div><h3 id="goodCount">0</h3><p>Good Nights</p></div>
+                </div>
+                <div class="stat-card average">
+                    <i class="fas fa-minus-circle"></i>
+                    <div><h3 id="averageCount">0</h3><p>Average Nights</p></div>
+                </div>
+                <div class="stat-card poor">
+                    <i class="fas fa-times-circle"></i>
+                    <div><h3 id="poorCount">0</h3><p>Poor Nights</p></div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="chart-container">
+                <canvas id="sleepTrendChart" height="200"></canvas>
+            </div>
+
+            <!-- History -->
+            <div class="recent-predictions">
+                <h3><i class="fas fa-history"></i> Recent Predictions</h3>
+                <div id="historyList">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Dashboard JavaScript
+        async function loadDashboard() {
+            try {
+                const res = await fetch('/history');
+                const history = await res.json();
+                updateStats(history);
+                createChart(history);
+                showHistory(history);
+            } catch(e) {
+                document.getElementById('historyList').innerHTML = 
+                    '<p>No data yet. Make some predictions first!</p>';
+            }
+        }
+        
+        function updateStats(history) {
+            const good = history.filter(h => h.prediction.quality === 'Good').length;
+            document.getElementById('goodCount').textContent = good;
+            document.getElementById('averageCount').textContent = 
+                history.filter(h => h.prediction.quality === 'Average').length;
+            document.getElementById('poorCount').textContent = 
+                history.filter(h => h.prediction.quality === 'Poor').length;
+        }
+        
+        function createChart(history) {
+            const ctx = document.getElementById('sleepTrendChart').getContext('2d');
+            const data = history.slice(-14).reverse().map(h => {
+                return h.prediction.quality === 'Good' ? 2 : 
+                       h.prediction.quality === 'Average' ? 1 : 0;
+            });
+            const labels = history.slice(-14).reverse().map((_, i) => `Day ${i+1}`);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        data,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102,126,234,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            min: 0, max: 2,
+                            ticks: { stepSize: 1, callback: v => ['Poor','Average','Good'][v] }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function showHistory(history) {
+            const list = document.getElementById('historyList');
+            const recent = history.slice(-5);
+            list.innerHTML = recent.length ? 
+                recent.map(h => {
+                    const q = h.prediction.quality;
+                    const color = q === 'Good' ? '#48bb78' : q === 'Average' ? '#f6ad55' : '#f56565';
+                    return `<div style="display:flex;justify-content:space-between;padding:15px;background:#f8fafc;margin:5px 0;border-left:4px solid ${color}">
+                        <span>${new Date(h.date).toLocaleDateString()}</span>
+                        <strong style="color:${color}">${q}</strong>
+                        <span>${h.features.sleep_duration}h</span>
+                    </div>`;
+                }).join('') : '<p>No predictions yet!</p>';
+        }
+        
+        // Load on page ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadDashboard);
+        } else {
+            loadDashboard();
+        }
+    </script>
+</body>
+</html>
