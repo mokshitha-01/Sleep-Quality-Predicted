@@ -1,0 +1,86 @@
+[
+  {
+    "date": "2026-03-27 21:43:13",
+    "features": {
+      "sleep_duration": 6.0,
+      "caffeine_intake": "High",
+      "exercise_duration": 30.0,
+      "screen_time": 150.0,
+      "stress_level": 10.0,
+      "mood": "Sad",
+      "interruptions": "Yes"
+    },
+    "prediction": {
+      "quality": "Average",
+      "confidence": 98.0,
+      "probabilities": {
+        "Poor": "1.0%",
+        "Average": "98.0%",
+        "Good": "1.0%"
+      }
+    }
+  },
+  {
+    "date": "2026-03-31 17:20:42",
+    "features": {
+      "sleep_duration": 6.0,
+      "caffeine_intake": "Low",
+      "exercise_duration": 30.0,
+      "screen_time": 15.0,
+      "stress_level": 5.0,
+      "mood": "Happy",
+      "interruptions": "Yes"
+    },
+    "prediction": {
+      "quality": "Poor",
+      "confidence": 66.0,
+      "probabilities": {
+        "Poor": "66.0%",
+        "Average": "5.0%",
+        "Good": "29.0%"
+      }
+    }
+  },
+  {
+    "date": "2026-03-31 18:00:09",
+    "features": {
+      "sleep_duration": 9.0,
+      "caffeine_intake": "None",
+      "exercise_duration": 30.0,
+      "screen_time": 60.0,
+      "stress_level": 5.0,
+      "mood": "Happy",
+      "interruptions": "No"
+    },
+    "prediction": {
+      "quality": "Good",
+      "confidence": 97.0,
+      "probabilities": {
+        "Poor": "1.0%",
+        "Average": "2.0%",
+        "Good": "97.0%"
+      }
+    }
+  },
+  {
+    "date": "2026-06-28 10:50:36",
+    "features": {
+      "sleep_duration": 2.0,
+      "caffeine_intake": "High",
+      "exercise_duration": 10.0,
+      "screen_time": 150.0,
+      "stress_level": 10.0,
+      "mood": "Anxious",
+      "interruptions": "Yes"
+    },
+    "prediction": {
+      "quality": "Average",
+      "confidence": 95.0,
+      "probabilities": {
+        "Poor": "5.0%",
+        "Average": "95.0%",
+        "Good": "0.0%"
+      }
+    }
+  }
+]
