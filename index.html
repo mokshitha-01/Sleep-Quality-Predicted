@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Quality Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-moon-stars"></i>
+                <h1>Sleep Quality Predictor</h1>
+            </div>
+            <p>A smart way to monitor & improve your sleep health</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2><i class="fas fa-bed"></i> Enter Your Daily Data</h2>
+                <form id="sleepForm" class="input-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="sleep_duration">Sleep Duration <span>(hours)</span></label>
+                            <input type="number" id="sleep_duration" min="0" max="24" step="0.1" value="7" required>
+                            <small>Hours slept last night</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exercise_duration">Exercise <span>(minutes)</span></label>
+                            <input type="number" id="exercise_duration" min="0" max="300" value="30" required>
+                            <small>Physical activity today</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="screen_time">Screen Time Before Bed <span>(minutes)</span></label>
+                            <input type="number" id="screen_time" min="0" max="360" value="60" required>
+                            <small>Phone/TV usage before sleep</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="caffeine_intake">Caffeine Intake</label>
+                            <select id="caffeine_intake" required>
+                                <option value="None">None ☕</option>
+                                <option value="Low">Low (1 cup)</option>
+                                <option value="Moderate">Moderate (2-3 cups)</option>
+                                <option value="High">High (4+ cups)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="stress_level">Stress Level</label>
+                            <div class="slider-container">
+                                <input type="range" id="stress_level" min="0" max="10" value="5" class="stress-slider">
+                                <span id="stress_value" class="stress-display">5</span>
+                            </div>
+                            <small>How stressed was your day?</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mood">Mood Before Sleep</label>
+                            <select id="mood" required>
+                                <option value="Happy">Happy 😊</option>
+                                <option value="Neutral" selected>Neutral 😐</option>
+                                <option value="Sad">Sad 😔</option>
+                                <option value="Anxious">Anxious 😰</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="interruptions">
+                                <span>Woke up during the night? <i class="fas fa-question-circle" title="Sleep interruptions"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="predict-btn">
+                            <i class="fas fa-magic"></i> Predict My Sleep Quality
+                        </button>
+                        <button type="button" class="reset-btn">
+                            <i class="fas fa-refresh"></i> Reset Form
+                        </button>
+                        
+                        <!-- ✅ FIXED DASHBOARD BUTTON - PASTE THIS EXACTLY -->
+                        <a href="/dashboard" class="dashboard-btn" style="text-decoration:none;">
+                            <i class="fas fa-chart-line"></i> View Dashboard
+                        </a>
+                        <!-- ✅ END DASHBOARD BUTTON -->
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section (Hidden by default) -->
+            <div id="resultsSection" class="results-section hidden">
+                <h2><i class="fas fa-star"></i> Your Sleep Analysis</h2>
+                <div id="predictionResult" class="prediction-card"></div>
+                <div id="tipsSection" class="tips-section"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
